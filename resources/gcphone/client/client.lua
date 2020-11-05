@@ -622,7 +622,7 @@ RegisterNUICallback('setIgnoreFocus', function (data, cb)
 end)
 
 RegisterNUICallback('takePhoto', function(data, cb)
-  CreateMobilePhone(1)
+    CreateMobilePhone(1)
   CellCamActivate(true, true)
   takePhoto = true
   Citizen.Wait(0)
@@ -630,13 +630,12 @@ RegisterNUICallback('takePhoto', function(data, cb)
     SetNuiFocus(false, false)
     hasFocus = false
   end
-
-while takePhoto do
+    while takePhoto do
     Citizen.Wait(0)
 
-    if IsControlJustPressed(1, 27) then -- Toogle Mode
-	frontCam = not frontCam
-	CellFrontCamActivate(frontCam)
+        if IsControlJustPressed(1, 27) then -- Toogle Mode
+            frontCam = not frontCam
+            CellFrontCamActivate(frontCam)
     elseif IsControlJustPressed(1, 177) then -- CANCEL
       DestroyMobilePhone()
       CellCamActivate(false, false)
@@ -644,19 +643,19 @@ while takePhoto do
       takePhoto = false
       break
     elseif IsControlJustPressed(1, 176) then -- TAKE.. PIC
-	exports['screenshot-basic']:requestScreenshotUpload(data.url, data.field, function(data)
-        local resp = json.decode(data)
-        DestroyMobilePhone()
-        CellCamActivate(false, false)
-        cb(json.encode({ url = resp.files[1].url }))   
-      end)
+      exports['screenshot-basic']:requestScreenshotUpload("WEBHOOK URL", data.field, function(data)
+      local resp = json.decode(data)
+      DestroyMobilePhone()
+      CellCamActivate(false, false)
+      cb(json.encode({ url = resp.attachments[1].proxy_url }))
+    end)
       takePhoto = false
-    end
-    HideHudComponentThisFrame(7)
-    HideHudComponentThisFrame(8)
-    HideHudComponentThisFrame(9)
-    HideHudComponentThisFrame(6)
-    HideHudComponentThisFrame(19)
+        end
+        HideHudComponentThisFrame(7)
+        HideHudComponentThisFrame(8)
+        HideHudComponentThisFrame(9)
+        HideHudComponentThisFrame(6)
+        HideHudComponentThisFrame(19)
     HideHudAndRadarThisFrame()
   end
   Citizen.Wait(1000)
